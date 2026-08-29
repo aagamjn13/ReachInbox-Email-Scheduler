@@ -124,9 +124,7 @@ const ComposePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsScheduleOpen(!isScheduleOpen)}
-                type="button" 
                 className="px-2 py-1.5 hover:bg-green-50 rounded-r-full flex items-center justify-center"
-                onClick={() => setIsScheduleOpen(!isScheduleOpen)}
               >
                 <ChevronDown className="h-4 w-4" />
               </button>
