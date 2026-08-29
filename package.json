@@ -1,0 +1,37 @@
+{
+  "name": "reachinbox-email-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-style full-stack Email Job Scheduler with BullMQ, Redis, PostgreSQL, and Elasticsearch",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently --names \"api,worker,frontend\" --prefix-colors \"blue,magenta,green\" \"npm run dev:backend\" \"npm run dev:worker\" \"npm run dev:frontend\"",
+    "start": "concurrently --names \"api,worker,frontend\" --prefix-colors \"blue,magenta,green\" \"npm run start:backend\" \"npm run start:worker\" \"npm run dev:frontend\"",
+    "start:backend": "npm run start --workspace=backend",
+    "start:worker": "npm run start:worker --workspace=backend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:worker": "npm run dev:worker --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "typecheck": "npm run typecheck --workspace=backend && npm run typecheck --workspace=frontend",
+    "typecheck:backend": "npm run typecheck --workspace=backend",
+    "typecheck:frontend": "npm run typecheck --workspace=frontend",
+    "db:migrate": "npm run db:migrate --workspace=backend",
+    "db:seed": "npm run db:seed --workspace=backend",
+    "db:generate": "npm run db:generate --workspace=backend",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v && docker compose up -d"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
