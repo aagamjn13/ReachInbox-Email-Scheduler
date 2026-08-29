@@ -90,3 +90,17 @@ npm run dev
 - ✅ **Rich Text Editor:** Fully featured TipTap editor with exact custom toolbar.
 - ✅ **CSV Upload:** Parses `.csv` and `.txt` files directly into recipient chips.
 - ✅ **Dashboards:** Paginated tables for Scheduled and Sent emails with dynamic status badges.
+
+
+## 📧 How to Set Up Ethereal Email & Environment Variables
+Ethereal Email is a fake SMTP service used for testing. We have automated the creation of these accounts for you.
+1. Fill out `.env` using `.env.example`.
+2. When you run `npm run db:seed`, the script dynamically calls the Ethereal API to provision two completely new, real test accounts on the fly.
+3. The script symmetrically encrypts their SMTP passwords using AES-256-GCM (using your `ENCRYPTION_KEY`) and stores them securely in your database. 
+4. The worker decrypts them at runtime when sending emails.
+You do not need to manually create Ethereal accounts unless you explicitly want to hardcode them in `.env`.
+
+## ⚖️ Assumptions & Trade-offs
+- **Fixed-Window vs Sliding-Window Rate Limiting:** We implemented a Fixed-Window token bucket (e.g., resets at the top of the hour) in Redis. A Sliding-Window approach is more accurate but requires `ZSET` range queries which are significantly heavier under high concurrency.
+- **Microservices vs Monorepo:** We placed the API server and the BullMQ worker in the same backend codebase (though they run as entirely separate processes: `npm run start` vs `npm run start:worker`). This was done to share Prisma schemas and TypeScript types easily without setting up a private npm package or monorepo workspace.
+- **TipTap Indentation:** TipTap's standard `StarterKit` does not support standard paragraph indentation (margin-left) out of the box. We wired the indent/outdent toolbar buttons to list-indentation (`sinkListItem`/`liftListItem`) which is the most common use-case in email formatting.
