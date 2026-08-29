@@ -71,13 +71,13 @@ services:
       - key: ENCRYPTION_KEY
         sync: false # Must be identical to the API's encryption key
 
+  - type: redis
+    name: reachinbox-redis
+    plan: free
+    ipAllowList: [] # only allow internal connections
+
 databases:
   - name: reachinbox-db
     databaseName: reachinbox
     user: reachinbox_user
     plan: free
-
-  - type: redis
-    name: reachinbox-redis
-    plan: free
-    ipAllowList: [] # only allow internal connections
