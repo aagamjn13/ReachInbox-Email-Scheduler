@@ -121,7 +121,7 @@ const Sidebar: React.FC = () => {
           </div>
         ) : (
           <a 
-            href={`${import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL !== '/api' ? import.meta.env.VITE_API_URL : 'https://reachinbox-api-tvq8.onrender.com/api'}/integrations/slack/connect`}
+            href={`https://reachinbox-api-tvq8.onrender.com/api/integrations/slack/connect`}
             className="flex w-full items-center justify-center gap-2 rounded border border-gray-300 bg-white py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
