@@ -18,26 +18,23 @@ A full-stack application for scheduling, queuing, and sending emails reliably. T
 
 ---
 
-## ?? Demo Video
-[INSERT YOUR 5-MINUTE DEMO VIDEO LINK HERE]
-
-*(The video demonstrates creating scheduled campaigns, the dashboard updating, simulated server restarts to show persistence, and rate-limiting behavior).*
-
----
 
 ## ?? Architecture Overview
 
 ### How Scheduling Works
 When a user schedules an email, the backend saves it to the PostgreSQL database with a SCHEDULED status. It calculates the time difference between 
-ow and the equestedStartTime, and pushes a job to the Redis-backed BullMQ queue with a delay parameter. BullMQ holds the job in a suspended "Delayed" state until the exact millisecond arrives.
+ow and the 
+equestedStartTime, and pushes a job to the Redis-backed BullMQ queue with a delay parameter. BullMQ holds the job in a suspended "Delayed" state until the exact millisecond arrives.
 
 ### How Persistence on Restart is Handled
 If the backend server crashes or is manually restarted, the in-memory state is lost, but the queue state lives safely in Redis (Upstash) and PostgreSQL. 
-When the server boots up, ecovery.service.ts runs. It queries the database for any emails stuck in PROCESSING (meaning the server crashed mid-send) and resets them. It then forcefully clears any ghost cache in BullMQ and re-adds all un-sent SCHEDULED emails to the front of the BullMQ queue.
+When the server boots up, 
+ecovery.service.ts runs. It queries the database for any emails stuck in PROCESSING (meaning the server crashed mid-send) and resets them. It then forcefully clears any ghost cache in BullMQ and re-adds all un-sent SCHEDULED emails to the front of the BullMQ queue.
 
 ### How Rate Limiting & Concurrency are Implemented
 The BullMQ worker operates with a concurrency limit (e.g., 10 parallel jobs). 
-When a job is picked up, it passes through ateLimit.service.ts. This service uses a custom Redis Lua script to atomically check and increment the sender's usage for the current hour bucket.
+When a job is picked up, it passes through 
+ateLimit.service.ts. This service uses a custom Redis Lua script to atomically check and increment the sender's usage for the current hour bucket.
 - If the sender has exceeded their Hourly Limit, the job is marked as RATE_LIMITED and moved back into BullMQ's delayed queue for 1 hour.
 - If the email violates the Minimum Delay (e.g. 2 seconds since the last email), it is pushed back into the queue for 2 seconds.
 
