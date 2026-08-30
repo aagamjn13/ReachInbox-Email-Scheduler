@@ -6,7 +6,7 @@ import Button from '../../components/ui/Button';
 
 const LoginPage: React.FC = () => {
   const { user, isLoading } = useAuth();
-  const apiUrl = 'https://reachinbox-api-tvq8.onrender.com/api';
+  const apiUrl = '/api';
 
   if (isLoading) {
     return <div className="flex h-screen items-center justify-center bg-white" />;
