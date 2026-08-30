@@ -18,7 +18,10 @@ export const getTransporter = (account: SenderAccount): nodemailer.Transporter =
     auth: {
       user: account.smtpUser,
       pass: password
-    }
+    },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 
   transporters.set(account.id, transporter);
