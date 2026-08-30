@@ -1,5 +1,6 @@
 import prisma from '../config/database';
 import { scheduleEmailJob } from './scheduler.service';
+import { emailQueue } from '../queues/email.queue';
 import logger from '../utils/logger';
 
 export const runRecovery = async () => {
@@ -24,6 +25,15 @@ export const runRecovery = async () => {
   });
 
   for (const email of orphanedEmails) {
+    // Forcefully remove the old job from BullMQ in case it's stuck in FAILED/COMPLETED state
+    // so we can bypass the jobId deduplication
+    try {
+      const job = await emailQueue.getJob(email.id);
+      if (job) await job.remove();
+    } catch (e) {
+      // Ignore errors if job doesn't exist
+    }
+
     await scheduleEmailJob(email.id, email.scheduledAt);
   }
 
