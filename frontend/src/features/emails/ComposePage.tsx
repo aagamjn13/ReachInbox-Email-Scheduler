@@ -75,9 +75,10 @@ const ComposePage: React.FC = () => {
 
       toast.success(startTime ? "Emails scheduled successfully!" : "Emails sending now!");
       navigate('/scheduled');
-    } catch (error: any) {
-      toast.error(error.message || "Failed to schedule emails");
-    }
+      } catch (err: any) {
+        const errorMsg = err.error || err.message || "Failed to schedule emails";
+        toast.error(errorMsg);
+      }
   };
 
   // Get current datetime string for min attribute (YYYY-MM-DDThh:mm)
