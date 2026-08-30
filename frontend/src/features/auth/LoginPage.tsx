@@ -6,7 +6,7 @@ import Button from '../../components/ui/Button';
 
 const LoginPage: React.FC = () => {
   const { user, isLoading } = useAuth();
-  const apiUrl = '/api';
+  const apiUrl = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api';
 
   if (isLoading) {
     return <div className="flex h-screen items-center justify-center bg-white" />;
