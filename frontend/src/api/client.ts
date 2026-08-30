@@ -13,6 +13,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('API Error intercepted:', error);
     // Return early if there's no response
     if (!error.response) {
       return Promise.reject({ message: 'Network error, please check your connection.' });

@@ -37,3 +37,6 @@ coverage/
 postgres-data/
 redis-data/
 elasticsearch-data/
+
+.vercel
+.env*
