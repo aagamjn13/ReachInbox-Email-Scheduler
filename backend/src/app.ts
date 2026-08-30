@@ -22,6 +22,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Trust proxy (Render is behind a load balancer)
+app.set('trust proxy', 1);
+
 // Session setup
 const redisStore = new RedisStore({
   client: redisClient,
@@ -36,7 +39,7 @@ app.use(session({
   cookie: {
     secure: env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+    sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
   }
 }));
