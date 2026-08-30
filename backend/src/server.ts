@@ -5,6 +5,7 @@ import prisma from './config/database';
 import { initElasticsearch } from './config/elasticsearch';
 import { runRecovery } from './services/recovery.service';
 import { initQueueEvents } from './queues/queue.events';
+import { createEmailWorker } from './queues/email.worker';
 
 const startServer = async () => {
   try {
@@ -21,14 +22,21 @@ const startServer = async () => {
     // Run recovery to pick up stranded jobs
     await runRecovery();
 
+    // Start the BullMQ Worker in the same process to save memory
+    const worker = createEmailWorker();
+    worker.on('ready', () => {
+      logger.info('BullMQ Email Worker is ready and processing jobs');
+    });
+
     const server = app.listen(env.PORT, () => {
       logger.info(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
     });
 
     // Graceful Shutdown
     const shutdown = async () => {
-      logger.info('Shutting down server...');
+      logger.info('Shutting down server and worker...');
       server.close();
+      await worker.close();
       await prisma.$disconnect();
       process.exit(0);
     };
