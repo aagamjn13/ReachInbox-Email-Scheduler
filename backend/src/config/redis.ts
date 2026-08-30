@@ -5,6 +5,7 @@ const redisOptions: RedisOptions = {
   host: env.REDIS_HOST,
   port: env.REDIS_PORT,
   password: env.REDIS_PASSWORD || undefined,
+  tls: env.REDIS_PASSWORD ? {} : undefined, // Cloud Redis (Upstash) requires TLS
   maxRetriesPerRequest: null, // Required by BullMQ
 };
 
